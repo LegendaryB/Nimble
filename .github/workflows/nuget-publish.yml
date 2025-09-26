@@ -26,26 +26,9 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Update version in all packable csproj files
-        run: |
-          for csproj_file in $(find src -name "*.csproj"); do
-            if ! grep -q "<IsPackable>false</IsPackable>" "$csproj_file"; then
-              echo "Updating $csproj_file to version ${{ github.event.inputs.version }}"
-
-              if grep -q "<Version>" "$csproj_file"; then
-                sed -i "s#<Version>.*</Version>#<Version>${{ github.event.inputs.version }}</Version>#" "$csproj_file"
-              else
-                # insert before closing Project tag
-                sed -i "/<\/Project>/i \  <Version>${{ github.event.inputs.version }}</Version>" "$csproj_file"
-              fi
-            else
-              echo "Skipping $csproj_file (not packable)"
-            fi
-          done
-
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --no-build --output ./nupkg
-
+        run: dotnet pack --no-build -o ./nupkg /p:PackageVersion=${{ github.event.inputs.version }}
+      
       - name: Publish to NuGet
         run: dotnet nuget push "./nupkg/*.nupkg" \
           --api-key ${{ secrets.NUGET_API_KEY }} \
