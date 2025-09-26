@@ -8,8 +8,6 @@ A lightweight C# library to serve static files using Nimble.
 To be added
 ```
 
----
-
 ## 🛠️ Usage
 
 ```csharp

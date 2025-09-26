@@ -14,8 +14,6 @@ Nimble is a simple and flexible C# framework for creating HTTP servers and servi
 ## 🌟 Motivation
 I created Nimble for scenarios where a full-featured framework like ASP.NET Core would be overkill, offering a lightweight and flexible HTTP server — and a fun little project to experiment with.
 
----
-
 ## 🚀 Features
 * Create and run a lightweight HTTP server in C#
 * Add routes using controllers
@@ -24,8 +22,6 @@ I created Nimble for scenarios where a full-featured framework like ASP.NET Core
 * Simple and async-friendly API
 * Middleware-ready design for future extensibility
 * Fully self-contained, no external dependencies required
-
----
 
 ## 📝 Example Usage
 ```csharp
@@ -44,12 +40,8 @@ Open your browser and navigate to `http://localhost:5000/static` to see the stat
 To be added
 ```
 
----
-
 ## 📁 Nimble.StaticFiles
 Head over to [here](https://github.com/LegendaryB/Nimble/tree/main/src/Nimble.StaticFiles/README.md) to see it in action!
-
----
 
 ## 🖥️ Nimble.ConsoleApp
 Head over to [here](https://github.com/LegendaryB/Nimble/tree/main/src/Nimble.ConsoleApp) to check it out!
