@@ -38,5 +38,8 @@ await server.RunAsync();
 
 Open your browser and navigate to `http://localhost:5000/static` to see the static files served.
 
-## 🖥️ Nimble Console Example
+## Nimble.StaticFiles
+Head over to [here](https://github.com/LegendaryB/Nimble/tree/main/src/Nimble.StaticFiles/README.md) to see it in action!
+
+## 🖥️ Nimble.ConsoleApp
 Head over to [here](https://github.com/LegendaryB/Nimble/tree/main/src/Nimble.ConsoleApp) to check it out!
