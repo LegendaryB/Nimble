@@ -1,10 +1,10 @@
-# Nimble.StaticFiles
+# 📁 Nimble.StaticFiles
 
 A lightweight C# library to serve static files using Nimble.
 
-## Installation
+## 📦 Installation
 
-Add the project reference to your Nimble HTTP server project:
+Add the project reference to your project:
 
 ```bash
 dotnet add reference ../Nimble.StaticFiles/Nimble.StaticFiles.csproj
@@ -12,7 +12,7 @@ dotnet add reference ../Nimble.StaticFiles/Nimble.StaticFiles.csproj
 
 ---
 
-## Usage
+## 🛠️ Usage
 
 ```csharp
 using Nimble;
