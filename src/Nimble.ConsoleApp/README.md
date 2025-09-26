@@ -35,8 +35,5 @@ dotnet run -- serve-static http://localhost:5000/ -p ./
 
 You should see the HTTP server start and listening on the configured URL.
 
----
-
 ## 🙏 Credits
-
 This console app uses [Spectre.Console.Cli](https://spectreconsole.net/cli) for building and parsing commands in a clean and expressive way.
