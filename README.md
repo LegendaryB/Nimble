@@ -1,12 +1,10 @@
-<div style="text-align: center">
-<h1>Nimble</h1>
+<h1 align="center">NeatInput</h1>
+<div align="center">
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-c-sharp.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
 ![GitHub License](https://img.shields.io/github/license/LegendaryB/Nimble)
-![NuGet Downloads](https://img.shields.io/nuget/dt/Nimble?style=flat-square&label=LegendaryB.Nimble)
-![NuGet Downloads](https://img.shields.io/nuget/dt/Nimble?style=flat-square&label=LegendaryB.Nimble.StaticFiles)
 
 Nimble is a simple and flexible C# framework for creating HTTP servers and serving static files.
 
