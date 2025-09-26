@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Nimble</RootNamespace>
-        <PackageId>NotLegendaryB.Nimble</PackageId>
+        <PackageId>NotLegendaryB.Nimble.StaticFiles</PackageId>
         <Authors>LegendaryB</Authors>
         <Company>LegendaryB</Company>
     </PropertyGroup>
