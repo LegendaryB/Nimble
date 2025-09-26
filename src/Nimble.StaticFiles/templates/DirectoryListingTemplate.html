@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index of {{PATH}}</title>
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            min-height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 0 2rem;
+        }
+
+        main {
+            flex: 1;
+            padding: 0 2rem 3rem 2rem; /* keep your horizontal padding + space for footer */
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #343a40;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 0;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        li a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        li a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        footer {
+            font-size: 0.9rem;
+            color: gray;
+            text-align: center;
+            padding: 1rem 0;
+            border-top: 1px solid #ddd;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+
+<main>
+<h1>Index of {{PATH}}</h1>
+
+<ul>
+    {{ITEMS}}
+</ul>
+</main>
+<footer>
+    Powered by <a href="https://github.com/LegendaryB/Nimble" target="_blank">Nimble</a>
+</footer>
+
+</body>
+</html>
