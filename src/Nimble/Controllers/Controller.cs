@@ -5,16 +5,11 @@ namespace Nimble.Controllers;
 
 public abstract class Controller
 {
-    internal delegate Task HttpHandler(
-        HttpListenerRequest request,
-        HttpListenerResponse response,
-        CancellationToken cancellationToken = default);
-
     internal IReadOnlyDictionary<HttpVerb, HttpHandler> HttpMethodToHandlerMap { get; }
 
-    protected Controller()
+    protected Controller(Dictionary<HttpVerb, HttpHandler>? overrides = null)
     {
-        HttpMethodToHandlerMap = new Dictionary<HttpVerb, HttpHandler>
+        var map = new Dictionary<HttpVerb, HttpHandler>
         {
             { HttpVerb.Post, PostAsync },
             { HttpVerb.Put, PutAsync },
@@ -25,6 +20,14 @@ public abstract class Controller
             { HttpVerb.Options, OptionsAsync },
             { HttpVerb.Trace, TraceAsync }
         };
+        
+        if (overrides != null)
+        {
+            foreach (var kv in overrides)
+                map[kv.Key] = kv.Value;
+        }
+        
+        HttpMethodToHandlerMap = map;
     }
 
     public virtual Task PostAsync(

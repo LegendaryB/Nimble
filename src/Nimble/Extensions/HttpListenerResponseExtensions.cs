@@ -16,6 +16,7 @@ public static class HttpListenerResponseExtensions
         CancellationToken cancellationToken = default)
     {
         var bytes = Encoding.UTF8.GetBytes(body);
+        
         await response.RespondWithStatusCodeAsync(
             bytes,
             statusCode,
@@ -30,7 +31,7 @@ public static class HttpListenerResponseExtensions
     {
         response.StatusCode = (int)statusCode;
         response.ContentLength64 = 0;
-        response.Close();
+        
         return Task.CompletedTask;
     }
 
@@ -57,14 +58,11 @@ public static class HttpListenerResponseExtensions
         {
             response.ContentLength64 = body.Length;
             await response.OutputStream.WriteAsync(body, cancellationToken);
-            await response.OutputStream.FlushAsync(cancellationToken);
         }
         else
         {
             response.ContentLength64 = 0;
         }
-
-        response.Close();
     }
 
     public static Task RespondWithJsonAsync<T>(
