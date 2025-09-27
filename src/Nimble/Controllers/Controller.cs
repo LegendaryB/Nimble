@@ -17,8 +17,7 @@ public abstract class Controller
             { HttpVerb.Delete, DeleteAsync },
             { HttpVerb.Head, HeadAsync },
             { HttpVerb.Patch, PatchAsync },
-            { HttpVerb.Options, OptionsAsync },
-            { HttpVerb.Trace, TraceAsync }
+            { HttpVerb.Options, OptionsAsync }
         };
         
         if (overrides != null)

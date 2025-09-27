@@ -8,6 +8,5 @@ public enum HttpVerb
     Delete,
     Head,
     Patch,
-    Options,
-    Trace,
+    Options
 }
