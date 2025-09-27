@@ -1,4 +1,4 @@
-namespace Nimble.Templating.Constants;
+namespace Nimble.StaticFiles.Templating.Constants;
 
 internal static class DirectoryListingTemplatePlaceholders
 {

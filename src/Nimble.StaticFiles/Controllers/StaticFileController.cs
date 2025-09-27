@@ -1,22 +1,23 @@
 using System.Net;
 using System.Net.Mime;
-using Nimble.Content;
+using Nimble.Controllers;
 using Nimble.Extensions;
-using Nimble.Templating;
+using Nimble.StaticFiles.Content;
+using Nimble.StaticFiles.Templating;
 
-namespace Nimble.Controllers;
+namespace Nimble.StaticFiles.Controllers;
 
 internal class StaticFileController : Controller
 {
     private readonly string _route;
     private readonly string _rootFolderPath;
-    private readonly IFileExtensionToContentTypeMapper _contentTypeMapper;
+    private readonly IContentTypeMapper _contentTypeMapper;
     private readonly DirectoryListingGenerator _directoryListingGenerator;
 
     internal StaticFileController(
         string route,
         string rootFolderPath,
-        IFileExtensionToContentTypeMapper contentTypeMapper)
+        IContentTypeMapper contentTypeMapper)
     {
         _route = route.TrimEnd('/');
 

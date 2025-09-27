@@ -1,8 +1,8 @@
 using System.Net;
 using System.Text;
-using Nimble.Templating.Constants;
+using Nimble.StaticFiles.Templating.Constants;
 
-namespace Nimble.Templating;
+namespace Nimble.StaticFiles.Templating;
 
 internal class DirectoryListingGenerator
 {

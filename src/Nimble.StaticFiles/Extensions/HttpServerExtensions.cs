@@ -1,7 +1,8 @@
-using Nimble.Content;
-using Nimble.Controllers;
+using Nimble.Extensions;
+using Nimble.StaticFiles.Content;
+using Nimble.StaticFiles.Controllers;
 
-namespace Nimble.Extensions;
+namespace Nimble.StaticFiles.Extensions;
 
 public static class HttpServerExtensions
 {
@@ -9,7 +10,7 @@ public static class HttpServerExtensions
         this HttpServer server,
         string route,
         string folderPath,
-        IFileExtensionToContentTypeMapper? fileExtensionToContentTypeMapper = null)
+        IContentTypeMapper? fileExtensionToContentTypeMapper = null)
     {
         ArgumentNullException.ThrowIfNull(server);
         ArgumentException.ThrowIfNullOrWhiteSpace(route);
@@ -18,7 +19,7 @@ public static class HttpServerExtensions
         if (!Directory.Exists(folderPath))
             throw new DirectoryNotFoundException($"Folder '{folderPath}' not found.");
 
-        fileExtensionToContentTypeMapper ??= new FileExtensionToContentTypeMapper();
+        fileExtensionToContentTypeMapper ??= new ContentTypeMapper();
 
         return server
             .AddRoute(
