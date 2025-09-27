@@ -14,73 +14,80 @@ public class Router : IRouter
         HttpListenerResponse response,
         CancellationToken cancellationToken = default)
     {
-        if (request.Url == null)
-            return Controller.DefaultResponseAsync(response);
-
-        var path = request.Url.AbsolutePath;
-
-        RouteEntry? match = null;
-        
-        foreach (var route in _routes)
-        {
-            if (route.IsPrefix &&
-                path.StartsWith(
-                    route.RoutePattern,
-                    StringComparison.OrdinalIgnoreCase))
-            {
-                match = route;
-                break;
-            }
-
-            if (route.ParameterRegex != null &&
-                route.ParameterRegex.IsMatch(path))
-            {
-                match = route;
-                break;
-            }
-
-            if (route.IsPrefix ||
-                !string.Equals(
-                    route.RoutePattern,
-                    path,
-                    StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            match = route;
-            break;
-        }
-
-        if (match == null)
-            return Controller.DefaultResponseAsync(response);
-
-        if (!Enum.TryParse<HttpVerb>(
-            request.HttpMethod,
-            true,
-            out var method))
-        {
-            return Controller.DefaultResponseAsync(response);
-        }
-        
-        if (!match.Controller.HttpMethodToHandlerMap.TryGetValue(
-            method,
-            out var httpMethodHandler))
-        {
-            return Controller.DefaultResponseAsync(response);
-        }
-            
         try
         {
-            return httpMethodHandler.Invoke(
-                request,
-                response,
-                cancellationToken);
+            if (request.Url == null)
+                return Controller.DefaultResponseAsync(response);
+
+            var path = request.Url.AbsolutePath;
+
+            RouteEntry? match = null;
+
+            foreach (var route in _routes)
+            {
+                if (route.IsPrefix &&
+                    path.StartsWith(
+                        route.RoutePattern,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    match = route;
+                    break;
+                }
+
+                if (route.ParameterRegex != null &&
+                    route.ParameterRegex.IsMatch(path))
+                {
+                    match = route;
+                    break;
+                }
+
+                if (route.IsPrefix ||
+                    !string.Equals(
+                        route.RoutePattern,
+                        path,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                match = route;
+                break;
+            }
+
+            if (match == null)
+                return Controller.DefaultResponseAsync(response);
+
+            if (!Enum.TryParse<HttpVerb>(
+                    request.HttpMethod,
+                    true,
+                    out var method))
+            {
+                return Controller.DefaultResponseAsync(response);
+            }
+
+            if (!match.Controller.HttpMethodToHandlerMap.TryGetValue(
+                    method,
+                    out var httpMethodHandler))
+            {
+                return Controller.DefaultResponseAsync(response);
+            }
+
+            try
+            {
+                return httpMethodHandler.Invoke(
+                    request,
+                    response,
+                    cancellationToken);
+            }
+            catch
+            {
+                return response.RespondWithStatusCodeAsync(
+                    HttpStatusCode.InternalServerError);
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            return response.RespondWithStatusCodeAsync(
-                HttpStatusCode.InternalServerError);
+            return Controller.DefaultResponseAsync(response);
         }
     }
 
