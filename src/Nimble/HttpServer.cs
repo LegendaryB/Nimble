@@ -9,12 +9,12 @@ public class HttpServer : IDisposable
 {
     private readonly HttpListener _listener = new();
     private readonly List<IMiddleware> _middlewares = [];
-    
-    public Func<HttpListenerRequest, Task>? OnRequestReceived { get; set; }
-    public Func<HttpListenerResponse, Task>? OnResponseSent { get; set; }
-    public Func<Exception, HttpListenerContext, Task>? OnUnhandledException { get; set; }
-    public Func<Task>? OnServerStarted { get; set; }
-    public Func<Task>? OnServerStopped { get; set; }
+
+    private Func<HttpListenerRequest, Task>? _onRequestReceivedCallback;
+    private Func<HttpListenerResponse, Task>? _onResponseSentCallback;
+    private Func<Exception, HttpListenerContext, Task>? _onUnhandledExceptionCallback;
+    private Func<Task>? _onServerStartedCallback;
+    private Func<Task>? _onServerStoppedCallback;
     
     internal IRouter Router { get; set; } = new Router();
 
@@ -54,8 +54,8 @@ public class HttpServer : IDisposable
     {
         _listener.Start();
 
-        if (OnServerStarted != null)
-            await OnServerStarted.Invoke();
+        if (_onServerStartedCallback != null)
+            await _onServerStartedCallback.Invoke();
         
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -66,21 +66,21 @@ public class HttpServer : IDisposable
 
             try
             {
-                if (OnRequestReceived != null)
-                    await OnRequestReceived.Invoke(ctx!.Request);
+                if (_onRequestReceivedCallback != null)
+                    await _onRequestReceivedCallback.Invoke(ctx!.Request);
                 
                 await InvokeMiddlewareChainAsync(
                     ctx!,
                     cancellationToken);
 
-                if (OnResponseSent != null)
-                    await OnResponseSent(ctx!.Response);
+                if (_onResponseSentCallback != null)
+                    await _onResponseSentCallback(ctx!.Response);
             }
             catch (Exception ex)
             {
-                if (OnUnhandledException != null)
+                if (_onUnhandledExceptionCallback != null)
                 {
-                    await OnUnhandledException.Invoke(
+                    await _onUnhandledExceptionCallback.Invoke(
                         ex,
                         ctx!);
                     
@@ -94,8 +94,48 @@ public class HttpServer : IDisposable
         
         _listener.Stop();
         
-        if (OnServerStopped != null)
-            await OnServerStopped.Invoke();
+        if (_onServerStoppedCallback != null)
+            await _onServerStoppedCallback.Invoke();
+    }
+
+    public HttpServer SetOnRequestReceivedCallback(Func<HttpListenerRequest, Task> callback)
+    {
+        ArgumentNullException.ThrowIfNull(callback);
+
+        _onRequestReceivedCallback = callback;
+        return this;
+    }
+    
+    public HttpServer SetOnResponseSentCallback(Func<HttpListenerResponse, Task> callback)
+    {
+        ArgumentNullException.ThrowIfNull(callback);
+
+        _onResponseSentCallback = callback;
+        return this;
+    }
+    
+    public HttpServer SetOnUnhandledExceptionCallback(Func<Exception, HttpListenerContext, Task> callback)
+    {
+        ArgumentNullException.ThrowIfNull(callback);
+
+        _onUnhandledExceptionCallback = callback;
+        return this;
+    }
+    
+    public HttpServer SetOnServerStartedCallback(Func<Task> callback)
+    {
+        ArgumentNullException.ThrowIfNull(callback);
+
+        _onServerStartedCallback = callback;
+        return this;
+    }
+    
+    public HttpServer SetOnServerStoppedCallback(Func<Task> callback)
+    {
+        ArgumentNullException.ThrowIfNull(callback);
+
+        _onServerStoppedCallback = callback;
+        return this;
     }
 
     private async Task InvokeMiddlewareChainAsync(
