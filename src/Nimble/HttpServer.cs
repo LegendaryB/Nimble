@@ -9,16 +9,19 @@ public class HttpServer : IDisposable
 {
     private readonly HttpListener _listener = new();
     private readonly List<IMiddleware> _middlewares = [];
-
+    
     internal IRouter Router { get; set; } = new Router();
+
+    public HttpServer()
+        : this("http://localhost:5000") {}
+    
+    public HttpServer(string prefix)
+        : this([prefix]) {}
     
     public HttpServer(params string[] prefixes)
-    {   
-        var prefixesToAdd = prefixes
-            .Where(prefix => !string.IsNullOrWhiteSpace(prefix));
-        
-        foreach (var prefix in prefixesToAdd)
-            _listener.Prefixes.Add(prefix);
+    {
+        foreach (var prefix in prefixes)
+            _listener.Prefixes.Add(NormalizeAndValidatePrefix(prefix));
     }
 
     public HttpServer Use(NimbleMiddlewareDelegate middleware)
@@ -44,7 +47,7 @@ public class HttpServer : IDisposable
     public async Task RunAsync(CancellationToken cancellationToken = default)
     {
         _listener.Start();
-
+        
         while (!cancellationToken.IsCancellationRequested)
         {
             var (success, ctx) = await _listener.TryGetContextAsync();
@@ -52,11 +55,18 @@ public class HttpServer : IDisposable
             if (!success)
                 break;
 
-            await InvokeMiddlewareChainAsync(
-                ctx!,
-                cancellationToken);
+            try
+            {
+                await InvokeMiddlewareChainAsync(
+                    ctx!,
+                    cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                await ctx!.Response.RespondWithStatusCodeAsync(HttpStatusCode.InternalServerError);
+            }
         }
-
+        
         _listener.Stop();
     }
 
@@ -97,7 +107,53 @@ public class HttpServer : IDisposable
 
         await next(cancellationToken);
     }
+    
+    private static string NormalizeAndValidatePrefix(string prefix)
+    {
+        var normalizedPrefix = NormalizePrefix(prefix);
 
+        if (!Uri.TryCreate(
+            normalizedPrefix,
+            UriKind.Absolute,
+            out var uri))
+        {
+            throw new ArgumentException(
+                "Invalid prefix: Must be a valid absolute URI.",
+                nameof(prefix));
+        }
+
+        return NormalizePrefixPort(
+            normalizedPrefix,
+            uri);
+    }
+
+    private static string NormalizePrefix(string prefix)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(prefix);
+        
+        prefix = prefix.Trim();
+        
+        if (!prefix.EndsWith("/"))
+            prefix += "/";
+
+        if (!prefix.StartsWith("http://") &&
+            !prefix.StartsWith("https://"))
+        {
+            prefix = "http://" + prefix;
+        }
+
+        return prefix;
+    }
+
+    private static string NormalizePrefixPort(
+        string prefix,
+        Uri uri)
+    {
+        return uri.IsDefaultPort 
+            ? $"{uri.Scheme}://{uri.Host}:{(uri.Scheme == "https" ? 443 : 80)}/" 
+            : prefix;
+    }
+    
     public void Dispose()
     {
         ((IDisposable)_listener).Dispose();
