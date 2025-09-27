@@ -1,8 +1,8 @@
 using System.Net.Mime;
 
-namespace Nimble.Content;
+namespace Nimble.StaticFiles.Content;
 
-internal class FileExtensionToContentTypeMapper : IFileExtensionToContentTypeMapper
+internal class ContentTypeMapper : IContentTypeMapper
 {
     public string GetContentTypeFor(string fileExtension)
     {

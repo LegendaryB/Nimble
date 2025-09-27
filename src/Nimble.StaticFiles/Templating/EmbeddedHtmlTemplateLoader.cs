@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace Nimble.Templating;
+namespace Nimble.StaticFiles.Templating;
 
 internal static class EmbeddedHtmlTemplateLoader
 {
