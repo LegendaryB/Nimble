@@ -28,6 +28,8 @@ public class HttpServer : IDisposable
     {
         foreach (var prefix in prefixes)
             _listener.Prefixes.Add(NormalizeAndValidatePrefix(prefix));
+
+        Use<BlockTraceMiddleware>();
     }
 
     public HttpServer Use(NimbleMiddlewareDelegate middleware)

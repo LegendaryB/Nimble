@@ -59,14 +59,6 @@ public static class HttpServerRoutingExtensions
             route,
             HttpVerb.Options,
             handler);
-    
-    public static HttpServer MapTrace(
-        this HttpServer server,
-        string route,
-        HttpHandler handler) => server.Map(
-            route,
-            HttpVerb.Trace,
-            handler);
 
     private static HttpServer Map(
         this HttpServer server,
