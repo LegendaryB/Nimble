@@ -5,7 +5,7 @@ A lightweight C# library to serve static files using Nimble.
 ## 📦 Installation
 
 ```bash
-To be added
+dotnet add package NotLegendaryB.Nimble.StaticFiles
 ```
 
 ## 🛠️ Usage

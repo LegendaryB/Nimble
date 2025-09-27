@@ -6,17 +6,14 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <PackageId>NotLegendaryB.Nimble.ConsoleApp</PackageId>
         <Authors>LegendaryB</Authors>
         <Company>LegendaryB</Company>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/LegendaryB/Nimble</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Nimble.StaticFiles\Nimble.StaticFiles.csproj" />
-      <ProjectReference Include="..\Nimble\Nimble.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <PackageReference Include="NotLegendaryB.Nimble.StaticFiles" Version="1.0.1" />
       <PackageReference Include="Spectre.Console.Cli" Version="0.51.2-preview.0.1" />
     </ItemGroup>
 

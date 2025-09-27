@@ -5,8 +5,15 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>NotLegendaryB.Nimble</PackageId>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/LegendaryB/Nimble</PackageProjectUrl>
         <Authors>LegendaryB</Authors>
         <Company>LegendaryB</Company>
+        <Copyright>Copyright (c) LegendaryB 2025</Copyright>
+        <Version>1.0.0</Version>
+        <Description>Nimble is a simple and flexible C# framework for creating HTTP servers and serving static files. </Description>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/LegendaryB/Nimble</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>

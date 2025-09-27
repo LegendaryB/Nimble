@@ -5,6 +5,8 @@
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 
 ![GitHub License](https://img.shields.io/github/license/LegendaryB/Nimble)
+![NuGet Version](https://img.shields.io/nuget/vpre/NotLegendaryB.Nimble?label=Nimble)
+![NuGet Version](https://img.shields.io/nuget/vpre/NotLegendaryB.Nimble.StaticFiles?label=Nimble.StaticFiles)
 
 Nimble is a simple and flexible C# framework for creating HTTP servers and serving static files.
 
@@ -37,7 +39,7 @@ Open your browser and navigate to `http://localhost:5000/static` to see the stat
 ## 📦 Installation
 
 ```bash
-To be added
+dotnet add package NotLegendaryB.Nimble
 ```
 
 ## 📁 Nimble.StaticFiles
