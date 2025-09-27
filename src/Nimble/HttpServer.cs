@@ -10,6 +10,12 @@ public class HttpServer : IDisposable
     private readonly HttpListener _listener = new();
     private readonly List<IMiddleware> _middlewares = [];
     
+    public Func<HttpListenerRequest, Task>? OnRequestReceived { get; set; }
+    public Func<HttpListenerResponse, Task>? OnResponseSent { get; set; }
+    public Func<Exception, HttpListenerContext, Task>? OnUnhandledException { get; set; }
+    public Func<Task>? OnServerStarted { get; set; }
+    public Func<Task>? OnServerStopped { get; set; }
+    
     internal IRouter Router { get; set; } = new Router();
 
     public HttpServer()
@@ -47,6 +53,9 @@ public class HttpServer : IDisposable
     public async Task RunAsync(CancellationToken cancellationToken = default)
     {
         _listener.Start();
+
+        if (OnServerStarted != null)
+            await OnServerStarted.Invoke();
         
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -57,17 +66,36 @@ public class HttpServer : IDisposable
 
             try
             {
+                if (OnRequestReceived != null)
+                    await OnRequestReceived.Invoke(ctx!.Request);
+                
                 await InvokeMiddlewareChainAsync(
                     ctx!,
                     cancellationToken);
+
+                if (OnResponseSent != null)
+                    await OnResponseSent(ctx!.Response);
             }
             catch (Exception ex)
             {
-                await ctx!.Response.RespondWithStatusCodeAsync(HttpStatusCode.InternalServerError);
+                if (OnUnhandledException != null)
+                {
+                    await OnUnhandledException.Invoke(
+                        ex,
+                        ctx!);
+                    
+                    return;
+                }
+
+                await ctx!.Response.RespondWithStatusCodeAsync(
+                    HttpStatusCode.InternalServerError);
             }
         }
         
         _listener.Stop();
+        
+        if (OnServerStopped != null)
+            await OnServerStopped.Invoke();
     }
 
     private async Task InvokeMiddlewareChainAsync(
