@@ -31,3 +31,5 @@ artifacts/
 
 *.nupkg
 *.snupkg
+
+/src/TestingConsoleApp/*

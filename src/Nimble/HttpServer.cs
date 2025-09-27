@@ -68,7 +68,7 @@ public class HttpServer : IDisposable
             {
                 if (_onRequestReceivedCallback != null)
                     await _onRequestReceivedCallback.Invoke(ctx!.Request);
-                
+
                 await InvokeMiddlewareChainAsync(
                     ctx!,
                     cancellationToken);
@@ -83,12 +83,17 @@ public class HttpServer : IDisposable
                     await _onUnhandledExceptionCallback.Invoke(
                         ex,
                         ctx!);
-                    
+
                     return;
                 }
 
                 await ctx!.Response.RespondWithStatusCodeAsync(
                     HttpStatusCode.InternalServerError);
+            }
+            finally
+            {
+                ctx?.Response.OutputStream.FlushAsync(cancellationToken);
+                ctx?.Response.Close();
             }
         }
         
