@@ -1,4 +1,5 @@
 using Nimble.Controllers;
+using Nimble.Http;
 
 namespace Nimble.Extensions;
 

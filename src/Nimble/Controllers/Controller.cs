@@ -1,5 +1,6 @@
 using System.Net;
 using Nimble.Extensions;
+using Nimble.Http;
 
 namespace Nimble.Controllers;
 
