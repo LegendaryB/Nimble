@@ -1,4 +1,4 @@
-namespace Nimble;
+namespace Nimble.Http;
 
 public enum HttpVerb
 {

@@ -2,6 +2,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using Nimble.Controllers;
 using Nimble.Extensions;
+using Nimble.Http;
 
 namespace Nimble.Routing;
 
