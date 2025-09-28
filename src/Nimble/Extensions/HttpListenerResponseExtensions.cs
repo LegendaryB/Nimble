@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
+using Nimble.Http;
 
 namespace Nimble.Extensions;
 
@@ -81,6 +82,54 @@ public static class HttpListenerResponseExtensions
             headers,
             cancellationToken);
     }
+    
+    public static Task RespondWithProblemDetailsAsync(
+        this HttpListenerResponse response,
+        string title,
+        string? detail = null,
+        string? type = null,
+        string? instance = null,
+        HttpStatusCode statusCode = HttpStatusCode.BadRequest,
+        IDictionary<string, string>? headers = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(response);
+        ArgumentNullException.ThrowIfNull(title);
+        
+        var problem = new ProblemDetails
+        {
+            Type = type!,
+            Title = title,
+            Status = (int)statusCode,
+            Detail = detail,
+            Instance = instance
+        };
+
+        return response.RespondWithProblemDetailsAsync(
+            problem,
+            statusCode,
+            headers,
+            cancellationToken);
+    }
+
+    public static Task RespondWithProblemDetailsAsync(
+        this HttpListenerResponse response,
+        ProblemDetails problem,
+        HttpStatusCode statusCode = HttpStatusCode.BadRequest,
+        IDictionary<string, string>? headers = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(response);
+        ArgumentNullException.ThrowIfNull(problem);
+
+        problem = SetProblemDetailsDefaults(problem);
+        
+        return response.RespondWithJsonAsync(
+            problem,
+            statusCode,
+            headers,
+            cancellationToken);
+    }
 
     private static async Task WriteResponseAsync(
         this HttpListenerResponse response,
@@ -115,5 +164,20 @@ public static class HttpListenerResponseExtensions
         {
             response.ContentLength64 = 0;
         }
+    }
+    
+    private static ProblemDetails SetProblemDetailsDefaults(
+        ProblemDetails problem,
+        HttpStatusCode statusCode = HttpStatusCode.BadRequest)
+    {
+        ArgumentNullException.ThrowIfNull(problem);
+
+        problem.Status ??= (int)statusCode;
+        problem.Type ??= "about:blank";
+        
+        if (string.IsNullOrWhiteSpace(problem.Title))
+            problem.Title = ((HttpStatusCode)problem.Status).ToString();
+
+        return problem;
     }
 }
