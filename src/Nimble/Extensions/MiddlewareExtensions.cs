@@ -1,3 +1,4 @@
+using System.Net;
 using Nimble.Middleware;
 
 namespace Nimble.Extensions;
@@ -14,5 +15,15 @@ public static class MiddlewareExtensions
         var corsMiddleware = new CorsMiddleware(allowOrigin);
 
         return server.Use(corsMiddleware);
+    }
+
+    public static HttpServer UseRequestLogging(
+        this HttpServer server,
+
+        Func<HttpListenerRequest, bool>? filter = null)
+    {
+        ArgumentNullException.ThrowIfNull(server);
+        
+        return server;
     }
 }
