@@ -6,8 +6,8 @@ namespace Nimble.Extensions;
 
 public static class MiddlewareExtensions
 {
-    public static HttpServer UseCors(
-        this HttpServer server,
+    public static IHttpServer UseCors(
+        this IHttpServer server,
         string allowOrigin = "*")
     {
         ArgumentNullException.ThrowIfNull(server);
@@ -18,8 +18,8 @@ public static class MiddlewareExtensions
         return server.Use(middleware);
     }
 
-    public static HttpServer UseRequestBlocking(
-        this HttpServer server,
+    public static IHttpServer UseRequestBlocking(
+        this IHttpServer server,
         Func<MiddlewareContext, bool>? predicate = null,
         HttpStatusCode? statusCode = null)
     {
@@ -33,8 +33,8 @@ public static class MiddlewareExtensions
         return server.Use(middleware);
     }
 
-    public static HttpServer UseRequestLogging(
-        this HttpServer server,
+    public static IHttpServer UseRequestLogging(
+        this IHttpServer server,
         Func<MiddlewareContext, CancellationToken, Task> loggerDelegate,
         Func<HttpListenerRequest, bool>? predicate = null)
     {

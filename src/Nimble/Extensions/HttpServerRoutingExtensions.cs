@@ -5,55 +5,55 @@ namespace Nimble.Extensions;
 
 public static class HttpServerRoutingExtensions
 {
-    public static HttpServer MapPost(
-        this HttpServer server,
+    public static IHttpServer MapPost(
+        this IHttpServer server,
         string route,
         HttpHandler handler) => server.Map(
             route,
             HttpVerb.Post,
             handler);
     
-    public static HttpServer MapPut(
-        this HttpServer server,
+    public static IHttpServer MapPut(
+        this IHttpServer server,
         string route,
         HttpHandler handler) => server.Map(
             route,
             HttpVerb.Put,
             handler);
     
-    public static HttpServer MapGet(
-        this HttpServer server,
+    public static IHttpServer MapGet(
+        this IHttpServer server,
         string route,
         HttpHandler handler) => server.Map(
             route,
             HttpVerb.Get,
             handler);
     
-    public static HttpServer MapDelete(
-        this HttpServer server,
+    public static IHttpServer MapDelete(
+        this IHttpServer server,
         string route,
         HttpHandler handler) => server.Map(
             route,
             HttpVerb.Delete,
             handler);
     
-    public static HttpServer MapHead(
-        this HttpServer server,
+    public static IHttpServer MapHead(
+        this IHttpServer server,
         string route,
         HttpHandler handler) => server.Map(
             route,
             HttpVerb.Head,
             handler);
     
-    public static HttpServer MapPatch(
-        this HttpServer server,
+    public static IHttpServer MapPatch(
+        this IHttpServer server,
         string route,
         HttpHandler handler) => server.Map(
             route,
             HttpVerb.Patch,
             handler);
     
-    public static HttpServer MapOptions(
+    public static IHttpServer MapOptions(
         this HttpServer server,
         string route,
         HttpHandler handler) => server.Map(
@@ -61,8 +61,8 @@ public static class HttpServerRoutingExtensions
             HttpVerb.Options,
             handler);
 
-    private static HttpServer Map(
-        this HttpServer server,
+    private static IHttpServer Map(
+        this IHttpServer server,
         string route,
         HttpVerb verb,
         HttpHandler handler)

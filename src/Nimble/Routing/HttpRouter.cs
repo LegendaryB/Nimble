@@ -6,7 +6,7 @@ using Nimble.Http;
 
 namespace Nimble.Routing;
 
-internal sealed class Router : IRouter
+internal sealed class HttpRouter : IHttpRouter
 {
     private readonly List<RouteEntry> _routes = [];
 

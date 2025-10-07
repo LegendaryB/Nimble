@@ -5,7 +5,9 @@ using Nimble.Routing;
 
 namespace Nimble;
 
-public class HttpServer : IDisposable
+public class HttpServer : 
+    IHttpServer,
+    IDisposable
 {
     private readonly HttpListener _listener = new();
     private readonly List<IMiddleware> _middlewares = [];
@@ -16,36 +18,25 @@ public class HttpServer : IDisposable
     private Func<Task>? _onServerStartedCallback;
     private Func<Task>? _onServerStoppedCallback;
     
-    internal IRouter Router { get; set; } = new Router();
-
-    public HttpServer(bool blockHttpTrace = true)
-        : this(blockHttpTrace, "http://localhost:5000") {}
+    public IHttpRouter Router { get; internal set; } = new HttpRouter();
     
-    public HttpServer(string prefix, bool blockHttpTrace = true)
-        : this(blockHttpTrace, prefix) {}
-    
-    public HttpServer(
-        bool blockHttpTrace = true,
-        params string[] prefixes)
+    public HttpServer(IEnumerable<string> prefixes)
     {
         foreach (var prefix in prefixes)
             _listener.Prefixes.Add(NormalizeAndValidatePrefix(prefix));
-
-        if (blockHttpTrace)
-            this.UseRequestBlocking();
     }
 
-    public HttpServer Use(NimbleMiddlewareDelegate middleware)
+    public IHttpServer Use(NimbleMiddlewareDelegate middleware)
     {
         ArgumentNullException.ThrowIfNull(middleware);
         
         return Use(new DelegateMiddleware(middleware));
     }
     
-    public HttpServer Use<TMiddleware>()
+    public IHttpServer Use<TMiddleware>()
         where TMiddleware : IMiddleware, new() => Use(new TMiddleware());
     
-    public HttpServer Use<TMiddleware>(TMiddleware middleware)
+    public IHttpServer Use<TMiddleware>(TMiddleware middleware)
         where TMiddleware : IMiddleware
     {
         ArgumentNullException.ThrowIfNull(middleware);
@@ -108,45 +99,20 @@ public class HttpServer : IDisposable
             await _onServerStoppedCallback.Invoke();
     }
 
-    public HttpServer SetOnRequestReceivedCallback(Func<HttpListenerRequest, Task> callback)
-    {
-        ArgumentNullException.ThrowIfNull(callback);
-
+    internal void SetOnRequestReceivedCallback(Func<HttpListenerRequest, Task> callback) =>
         _onRequestReceivedCallback = callback;
-        return this;
-    }
     
-    public HttpServer SetOnResponseSentCallback(Func<HttpListenerResponse, Task> callback)
-    {
-        ArgumentNullException.ThrowIfNull(callback);
-
+    internal void SetOnResponseSentCallback(Func<HttpListenerResponse, Task> callback) =>
         _onResponseSentCallback = callback;
-        return this;
-    }
     
-    public HttpServer SetOnUnhandledExceptionCallback(Func<Exception, HttpListenerContext, Task> callback)
-    {
-        ArgumentNullException.ThrowIfNull(callback);
-
+    internal void SetOnUnhandledExceptionCallback(Func<Exception, HttpListenerContext, Task> callback) =>
         _onUnhandledExceptionCallback = callback;
-        return this;
-    }
     
-    public HttpServer SetOnServerStartedCallback(Func<Task> callback)
-    {
-        ArgumentNullException.ThrowIfNull(callback);
-
+    internal void SetOnServerStartedCallback(Func<Task> callback) =>
         _onServerStartedCallback = callback;
-        return this;
-    }
     
-    public HttpServer SetOnServerStoppedCallback(Func<Task> callback)
-    {
-        ArgumentNullException.ThrowIfNull(callback);
-
+    internal void SetOnServerStoppedCallback(Func<Task> callback) =>
         _onServerStoppedCallback = callback;
-        return this;
-    }
 
     private async Task InvokeMiddlewareChainAsync(
         HttpListenerContext ctx,
