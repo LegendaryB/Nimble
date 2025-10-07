@@ -1,5 +1,3 @@
-using System.Net;
-
 namespace Nimble.Middleware;
 
 internal class DelegateMiddleware : IMiddleware
