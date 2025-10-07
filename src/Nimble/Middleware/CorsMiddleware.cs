@@ -3,8 +3,8 @@ using Nimble.Http;
 
 namespace Nimble.Middleware;
 
-public class CorsMiddleware(string allowOrigin = "*") : IMiddleware
-{   
+internal class CorsMiddleware(string allowOrigin = "*") : IMiddleware
+{
     public async Task InvokeAsync(
         MiddlewareContext ctx,
         Func<CancellationToken, Task> next,
