@@ -4,7 +4,7 @@ namespace Nimble.Extensions;
 
 public static class HttpListenerExtensions
 {
-    public static async Task<(bool Success, HttpListenerContext? Context)> TryGetContextAsync(
+    internal static async Task<(bool Success, HttpListenerContext? Context)> TryGetContextAsync(
         this HttpListener httpListener)
     {
         ArgumentNullException.ThrowIfNull(httpListener);

@@ -3,13 +3,13 @@ using Nimble.Http;
 
 namespace Nimble.Middleware;
 
-public class MiddlewareContext
+public sealed class MiddlewareContext
 {
     public HttpListenerRequest Request { get; init; }
     public HttpListenerResponse Response { get; init; }
     public HttpVerb RequestMethod { get; init; }
 
-    public MiddlewareContext(HttpListenerContext ctx)
+    internal MiddlewareContext(HttpListenerContext ctx)
     {
         Request = ctx.Request;
         Response = ctx.Response;
