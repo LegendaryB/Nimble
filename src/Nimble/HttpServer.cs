@@ -18,18 +18,21 @@ public class HttpServer : IDisposable
     
     internal IRouter Router { get; set; } = new Router();
 
-    public HttpServer()
-        : this("http://localhost:5000") {}
+    public HttpServer(bool blockHttpTrace = true)
+        : this(blockHttpTrace, "http://localhost:5000") {}
     
-    public HttpServer(string prefix)
-        : this([prefix]) {}
+    public HttpServer(string prefix, bool blockHttpTrace = true)
+        : this(blockHttpTrace, prefix) {}
     
-    public HttpServer(params string[] prefixes)
+    public HttpServer(
+        bool blockHttpTrace = true,
+        params string[] prefixes)
     {
         foreach (var prefix in prefixes)
             _listener.Prefixes.Add(NormalizeAndValidatePrefix(prefix));
 
-        Use<BlockTraceMiddleware>();
+        if (blockHttpTrace)
+            this.UseRequestBlocking();
     }
 
     public HttpServer Use(NimbleMiddlewareDelegate middleware)
