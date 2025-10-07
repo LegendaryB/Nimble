@@ -3,7 +3,7 @@ using Nimble.Http;
 
 namespace Nimble.Middleware;
 
-public class BlockTraceMiddleware : IMiddleware
+internal class BlockTraceMiddleware : IMiddleware
 {
     public async Task InvokeAsync(
         MiddlewareContext ctx,
