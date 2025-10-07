@@ -1,15 +1,16 @@
 using System.Net;
+using Nimble.Http;
 
 namespace Nimble.Middleware;
 
 public class BlockTraceMiddleware : IMiddleware
 {
     public async Task InvokeAsync(
-        HttpListenerContext ctx,
+        MiddlewareContext ctx,
         Func<CancellationToken, Task> next,
         CancellationToken cancellationToken = default)
     {
-        if (ctx.Request.HttpMethod == "TRACE")
+        if (ctx.RequestMethod == HttpVerb.Trace)
         {
             ctx.Response.StatusCode = (int)HttpStatusCode.MethodNotAllowed;
             return;

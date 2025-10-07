@@ -149,6 +149,7 @@ public class HttpServer : IDisposable
         HttpListenerContext ctx,
         CancellationToken cancellationToken)
     {
+        var middlewareCtx = new MiddlewareContext(ctx);
         var index = 0;
         
         Func<CancellationToken, Task> next = null!;
@@ -157,11 +158,11 @@ public class HttpServer : IDisposable
             if (index < _middlewares.Count)
             {
                 var middleware = _middlewares[index++];
-
+                
                 try
                 {
                     await middleware.InvokeAsync(
-                        ctx,
+                        middlewareCtx,
                         next,
                         ct);
                 }

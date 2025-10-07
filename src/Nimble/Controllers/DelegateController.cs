@@ -1,13 +1,12 @@
-using System.Net;
 using Nimble.Http;
 
 namespace Nimble.Controllers;
 
 internal class DelegateController(
     HttpHandler handler,
-    HttpVerb verb = HttpVerb.Get)
+    HttpVerb requestMethod = HttpVerb.Get)
     
     : Controller(new Dictionary<HttpVerb, HttpHandler>
     {
-        [verb] = handler.Invoke
+        [requestMethod] = handler.Invoke
     });

@@ -5,7 +5,7 @@ namespace Nimble.Middleware;
 public interface IMiddleware
 {
     Task InvokeAsync(
-        HttpListenerContext ctx,
+        MiddlewareContext ctx,
         Func<CancellationToken, Task> next,
         CancellationToken cancellationToken = default);
 }
