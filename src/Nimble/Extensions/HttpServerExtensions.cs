@@ -5,8 +5,8 @@ namespace Nimble.Extensions;
 
 public static class HttpServerExtensions
 {
-    public static HttpServer AddRoute<TController>(
-        this HttpServer server,
+    public static IHttpServer AddRoute<TController>(
+        this IHttpServer server,
         string route,
         bool isPrefix = false,
         string? parameterPattern = null)
@@ -18,8 +18,8 @@ public static class HttpServerExtensions
                 isPrefix,
                 parameterPattern);
     
-    public static HttpServer AddRoute<TController>(
-        this HttpServer server,
+    public static IHttpServer AddRoute<TController>(
+        this IHttpServer server,
         string route,
         TController controller,
         bool isPrefix = false,
@@ -36,25 +36,6 @@ public static class HttpServerExtensions
             controller,
             isPrefix,
             parameterPattern);
-        
-        return server;
-    }
-
-    public static HttpServer UseRouter<TRouter>(
-        this HttpServer server)
-
-        where TRouter : IRouter, new() => server.UseRouter(new TRouter());
-    
-    public static HttpServer UseRouter<TRouter>(
-        this HttpServer server,
-        TRouter router)
-
-        where TRouter : IRouter
-    {
-        ArgumentNullException.ThrowIfNull(server);
-        ArgumentNullException.ThrowIfNull(router);
-        
-        server.Router = router;
         
         return server;
     }

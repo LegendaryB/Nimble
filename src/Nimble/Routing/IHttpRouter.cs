@@ -3,7 +3,7 @@ using Nimble.Controllers;
 
 namespace Nimble.Routing;
 
-public interface IRouter
+public interface IHttpRouter
 {
     Task RouteAsync(
         HttpListenerRequest request,
