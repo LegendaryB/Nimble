@@ -5,14 +5,14 @@ namespace Nimble.Middleware;
 internal class RequestLoggingMiddleware : IMiddleware
 {
     private readonly Func<MiddlewareContext, CancellationToken, Task> _loggerDelegate;
-    private readonly Func<HttpListenerRequest, bool>? _filter;
+    private readonly Func<HttpListenerRequest, bool> _predicate;
 
     internal RequestLoggingMiddleware(
         Func<MiddlewareContext, CancellationToken, Task> loggerDelegate,
-        Func<HttpListenerRequest, bool>? filter = null)
+        Func<HttpListenerRequest, bool> predicate)
     {
         _loggerDelegate = loggerDelegate;
-        _filter = filter;
+        _predicate = predicate;
     }
     
     public async Task InvokeAsync(
@@ -20,7 +20,7 @@ internal class RequestLoggingMiddleware : IMiddleware
         Func<CancellationToken, Task> next,
         CancellationToken cancellationToken = default)
     {
-        if (_filter?.Invoke(ctx.Request) == false)
+        if (!_predicate.Invoke(ctx.Request))
         {
             await next(cancellationToken);
             return;

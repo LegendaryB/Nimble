@@ -1,3 +1,5 @@
+using System.Net;
+using Nimble.Http;
 using Nimble.Middleware;
 
 namespace Nimble.Extensions;
@@ -21,8 +23,7 @@ public static class MiddlewareExtensions
         Func<MiddlewareContext, bool>? predicate = null,
         HttpStatusCode? statusCode = null)
     {
-        statusCode = statusCode ??
-                     (predicate is null ? HttpStatusCode.MethodNotAllowed : HttpStatusCode.Forbidden);
+        statusCode ??= (predicate is null ? HttpStatusCode.MethodNotAllowed : HttpStatusCode.Forbidden);
         predicate ??= ctx => ctx.RequestMethod == HttpVerb.Trace;
         
         var middleware = new BlockRequestMiddleware(
@@ -34,11 +35,18 @@ public static class MiddlewareExtensions
 
     public static HttpServer UseRequestLogging(
         this HttpServer server,
-
-        Func<HttpListenerRequest, bool>? filter = null)
+        Func<MiddlewareContext, CancellationToken, Task> loggerDelegate,
+        Func<HttpListenerRequest, bool>? predicate = null)
     {
         ArgumentNullException.ThrowIfNull(server);
+        ArgumentNullException.ThrowIfNull(loggerDelegate);
         
-        return server;
+        predicate ??= _ => true;
+        
+        var middleware = new RequestLoggingMiddleware(
+            loggerDelegate,
+            predicate);
+
+        return server.Use(middleware);
     }
 }
