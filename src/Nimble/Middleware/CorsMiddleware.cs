@@ -6,7 +6,7 @@ namespace Nimble.Middleware;
 public class CorsMiddleware(string allowOrigin = "*") : IMiddleware
 {
     public async Task InvokeAsync(
-        HttpListenerContext ctx,
+        MiddlewareContext ctx,
         Func<CancellationToken, Task> next,
         CancellationToken cancellationToken = default)
     {
@@ -14,7 +14,7 @@ public class CorsMiddleware(string allowOrigin = "*") : IMiddleware
             HttpHeaderNames.AccessControlAllowOrigin
             , allowOrigin);
         
-        if (ctx.Request.HttpMethod == "OPTIONS")
+        if (ctx.RequestMethod == HttpVerb.Options)
         {
             ctx.Response.StatusCode = (int)HttpStatusCode.NoContent;
             return;

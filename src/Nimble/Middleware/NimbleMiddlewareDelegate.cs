@@ -1,8 +1,6 @@
-using System.Net;
-
 namespace Nimble.Middleware;
 
 public delegate Task NimbleMiddlewareDelegate(
-    HttpListenerContext context,
+    MiddlewareContext ctx,
     Func<CancellationToken, Task> next,
     CancellationToken cancellationToken);

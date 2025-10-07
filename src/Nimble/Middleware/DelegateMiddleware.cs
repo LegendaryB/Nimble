@@ -12,7 +12,7 @@ internal class DelegateMiddleware : IMiddleware
     }
     
     public Task InvokeAsync(
-        HttpListenerContext ctx,
+        MiddlewareContext ctx,
         Func<CancellationToken, Task> next,
         CancellationToken cancellationToken = default)
     {
